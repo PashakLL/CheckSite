@@ -1,8 +1,13 @@
 import urllib.request, time
+from datetime import datetime
+
 
 with open("Sites.txt") as f:
     sites = f.readlines()
-   
+
+current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
 maxtime = 10
 
 
@@ -26,13 +31,23 @@ def check_site(site, maxtime):
         return 'BAD', answer, None
     
 
+with open ('results.txt', 'a') as file:
+    file.write(f"\n{current_datetime}\n")
+
+
 for num, site in enumerate(sites, 1):
     site = site.strip()
     if site == '':
-        print(f"{num}. Неверные входные данные")
+        answer = f"{num}. неверные входные данные"
     else:
         status, answer, answer_time = check_site(site, maxtime)
         if answer_time is None:
-            print(f"{num}. {site} - {status} - по причине: {answer}")
+            answer = f"{num}. {site} - {status} - по причине: {answer}"
         else:
-            print(f"{num}. {site} - {status} - {answer}, время ответа: {answer_time:.2f} сек.")
+            answer = f"{num}. {site} - {status} - {answer}, время ответа: {answer_time:.2f} сек."
+    print(answer)
+    with open ('results.txt', 'a') as file:
+        file.write(f"{answer}\n")
+
+
+
