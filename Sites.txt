@@ -5,4 +5,4 @@ google.com
 https://github.com
 htps://github.com
 https://ya.ru
-https://stepik.org
+https://github.com/this-page-does-not-exist-12345

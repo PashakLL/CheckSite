@@ -9,7 +9,9 @@ current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
 maxtime = 10
-
+countOK = 0
+countBAD = 0
+countNULL = 0
 
 def check_site(site, maxtime):
     try:
@@ -38,16 +40,20 @@ with open ('results.txt', 'a') as file:
 for num, site in enumerate(sites, 1):
     site = site.strip()
     if site == '':
-        answer = f"{num}. неверные входные данные"
+        result_line = f"{num}. неверные входные данные"
+        countNULL += 1
     else:
         status, answer, answer_time = check_site(site, maxtime)
-        if answer_time is None:
-            answer = f"{num}. {site} - {status} - по причине: {answer}"
+        if status == 'BAD':
+            result_line = f"{num}. {site} - {status} - по причине: {answer}"
+            countBAD += 1
+            if answer_time is not None:
+                result_line += f", время ответа: {answer_time:.2f} сек."
         else:
-            answer = f"{num}. {site} - {status} - {answer}, время ответа: {answer_time:.2f} сек."
-    print(answer)
+            result_line = f"{num}. {site} - {status} - {answer}, время ответа: {answer_time:.2f} сек."
+            countOK += 1
+    print(result_line)
     with open ('results.txt', 'a') as file:
-        file.write(f"{answer}\n")
-
-
+        file.write(f"{result_line}\n")
+print(f"\nсайтов со статусом OK: {countOK}\nсайтов со статусом BAD: {countBAD}\nпустые запросы: {countNULL}")
 
